@@ -30,8 +30,8 @@ modules:
     buildsystem: simple
     build-options:
       env:
-        XDG_CACHE_HOME: /run/build/ipfs/flatpak-node/cache
-        npm_config_cache: /run/build/ipfs/flatpak-node/yarn-mirror
+        XDG_CACHE_HOME: /run/build/books/flatpak-node/cache
+        npm_config_cache: /run/build/books/flatpak-node/yarn-mirror
         npm_config_nodedir: /usr/lib/sdk/node20
         npm_config_offline: 'true'
     build-commands:
