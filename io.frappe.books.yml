@@ -24,12 +24,10 @@ modules:
           - x86_64
         url: "https://github.com/frappe/books/releases/download/v0.24.0/frappe-books-0.24.0.x86_64.rpm"
         sha256: aaf3bf77a5510b398b710eabb30a94c91155d347d1f6c19b5cd34be5a7cd041d
-
       - type: script
         dest-filename: run.sh
         commands:
           - zypak-wrapper.sh /app/frappe-books/frappe-books "$@"
-
       - type: file
         path: io.frappe.books.appdata.xml
     buildsystem: simple
