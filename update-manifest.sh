@@ -16,8 +16,6 @@ local_version=$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "$manifest_file" | head -1)
 
 local_hash=$(yq -r '.modules[0].sources[0].sha256' $manifest_file)
 
-echo "$local_hash"
-
 if [[ "$local_version" == "$upstream_version" ]]; then
  echo "No updates found"
  exit 0
@@ -35,6 +33,4 @@ sed -i "s/$local_hash/$new_hash/g" $manifest_file
 
 rm $tmp_file
 
-# TODO: automate the updation of appdata release info
-
-echo "updated manifest. Now update the appdata file with new changelog"
+echo -e "Manifest updates successfully\nNow update the appdata file with new changelog"
