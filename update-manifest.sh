@@ -6,11 +6,15 @@
 
 set -e
 
+api_response=$(curl -s -f https://api.github.com/repos/frappe/books/releases?per_page=1)
+
+upstream_version=$(echo  "$api_response"  | jq -r '.[0].name')
+
+release_date=$(echo "$api_response" | jq -r '.[0].published_at' | cut -dT -f1)
+
 manifest_file='io.frappe.books.yml'
 
 tmp_file='/tmp/books.rpm'
-
-upstream_version=$(curl -s -f https://api.github.com/repos/frappe/books/releases?per_page=1  | jq -r '.[0].name')
 
 local_version=$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "$manifest_file" | head -1)
 
@@ -33,4 +37,16 @@ sed -i "s/$local_hash/$new_hash/g" $manifest_file
 
 rm $tmp_file
 
-echo -e "Manifest updates successfully\nNow update the appdata file with new changelog"
+echo -e "Manifest updates successfully\nNow updating the appdata file with new changelog"
+
+
+changelog=$(cat <<EOF
+<release version="$upstream_version" date="$release_date">
+  <url type="details">https://github.com/frappe/books/releases/tag/v$upstream_version</url>
+</release>
+EOF
+)
+
+echo "$changelog" | wl-copy
+
+echo "Changelog copied to clipboard"
