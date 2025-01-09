@@ -30,6 +30,9 @@
 	</developer>
 
 	<releases>
+  <release version="0.26.0" date="2025-01-08">
+    <url type="details">https://github.com/frappe/books/releases/tag/v0.26.0</url>
+  </release>
   <release version="0.25.1" date="2024-12-17">
     <url type="details">https://github.com/frappe/books/releases/tag/v0.25.1</url>
   </release>
