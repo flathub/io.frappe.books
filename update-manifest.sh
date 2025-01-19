@@ -47,6 +47,4 @@ changelog=$(cat <<EOF
 EOF
 )
 
-echo "$changelog" | wl-copy
-
-echo "Changelog copied to clipboard"
+echo "$changelog"
