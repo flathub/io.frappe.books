@@ -22,8 +22,8 @@ modules:
       - type: archive
         only-arches:
           - x86_64
-        url: "https://github.com/frappe/books/releases/download/v0.26.0/frappe-books-0.26.0.x86_64.rpm"
-        sha256: b9c38adc730e59c1280ceebe1ae32eb27ec3f69c5faa6135e34169bb244e6372
+        url: "https://github.com/frappe/books/releases/download/v0.26.1/frappe-books-0.26.1.x86_64.rpm"
+        sha256: 1212e5837164108f19ee40a61877b3f41ea0ae5c086ef45cc27cd3d1e087e0b0
       - type: script
         dest-filename: run.sh
         commands:
