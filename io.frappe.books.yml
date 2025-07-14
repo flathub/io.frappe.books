@@ -22,12 +22,20 @@ modules:
       - type: archive
         only-arches:
           - x86_64
-        url: "https://github.com/frappe/books/releases/download/v0.31.0/frappe-books-0.31.0.x86_64.rpm"
-        sha256: e2c3a990121daefec26cb115a789d770d0e42094d22f371bc239e6424f39aafd
+        url: "https://github.com/frappe/books/releases/download/v0.32.0/frappe-books-0.32.0.x86_64.rpm"
+        sha256: 9318f45e7590521f62820f94c9909749cc9cb2ff83f87404e679a8fe7cd54ce1
+
+      - type: archive
+        only-arches:
+          - aarch64
+        url: "https://github.com/frappe/books/releases/download/v0.32.0/frappe-books-0.32.0.aarch64.rpm"
+        sha256: 9101df10cef5089bd7334e6474c7041d3896b22225f4fff63fd9f084148bbaff
+
       - type: script
         dest-filename: run.sh
         commands:
           - zypak-wrapper.sh /app/frappe-books/frappe-books "$@"
+
       - type: file
         path: io.frappe.books.appdata.xml
     buildsystem: simple

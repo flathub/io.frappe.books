@@ -15,10 +15,13 @@ release_date=$(echo "$api_response" | jq -r '.[0].published_at' | cut -dT -f1)
 manifest_file='io.frappe.books.yml'
 
 tmp_file='/tmp/books.rpm'
+tmp_file_arm64='/tmp/books-arm64.rpm'
 
 local_version=$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "$manifest_file" | head -1)
 
-local_hash=$(yq -r '.modules[0].sources[0].sha256' $manifest_file)
+local_hash_x86=$(yq -r '.modules[0].sources[0].sha256' $manifest_file)
+
+local_hash_aarch64=$(yq -r '.modules[0].sources[1].sha256' $manifest_file)
 
 if [[ "$local_version" == "$upstream_version" ]]; then
  echo "No updates found"
@@ -29,16 +32,22 @@ echo "Updating from $local_version -> $upstream_version"
 
 wget -O "$tmp_file" "https://github.com/frappe/books/releases/download/v$upstream_version/frappe-books-$upstream_version.x86_64.rpm"
 
-new_hash=$(sha256sum $tmp_file | awk '{print $1}')
+wget -O "$tmp_file_arm64" "https://github.com/frappe/books/releases/download/v$upstream_version/frappe-books-$upstream_version.aarch64.rpm"
+
+
+new_hash_x86=$(sha256sum $tmp_file | awk '{print $1}')
+
+new_hash_aarch64=$(sha256sum $tmp_file_arm64 | awk '{print $1}')
 
 sed -i 's/[0-9]\+\.[0-9]\+\.[0-9]\+/'"$upstream_version"'/g' $manifest_file
 
-sed -i "s/$local_hash/$new_hash/g" $manifest_file
+# replace old hashes with new hashes
+sed -i "s/$local_hash_x86/$new_hash_x86/g" $manifest_file
+sed -i "s/$local_hash_aarch64/$new_hash_aarch64/g" $manifest_file
 
-rm $tmp_file
+rm $tmp_file $tmp_file_arm64
 
-echo -e "Manifest updates successfully\nNow updating the appdata file with new changelog"
-
+echo -e "Update the appdata file with new changelog below\n"
 
 changelog=$(cat <<EOF
 <release version="$upstream_version" date="$release_date">
