@@ -47,7 +47,7 @@ sed -i "s/$local_hash_aarch64/$new_hash_aarch64/g" $manifest_file
 
 rm $tmp_file $tmp_file_arm64
 
-echo -e "Update the appdata file with new changelog below\n"
+echo -e "Prepend this entry to the <releases> section in 'io.frappe.books.appdata.xml' file with new changelog below\n"
 
 changelog=$(cat <<EOF
 <release version="$upstream_version" date="$release_date">
