@@ -22,14 +22,14 @@ modules:
       - type: archive
         only-arches:
           - x86_64
-        url: "https://github.com/frappe/books/releases/download/v0.32.0/frappe-books-0.32.0.x86_64.rpm"
-        sha256: 9318f45e7590521f62820f94c9909749cc9cb2ff83f87404e679a8fe7cd54ce1
+        url: "https://github.com/frappe/books/releases/download/v0.33.1/frappe-books-0.33.1.x86_64.rpm"
+        sha256: 1bf05c029a990ed5389a688f2b411148fc58b99b76ccfb7b26212f09d390fcac
 
       - type: archive
         only-arches:
           - aarch64
-        url: "https://github.com/frappe/books/releases/download/v0.32.0/frappe-books-0.32.0.aarch64.rpm"
-        sha256: 9101df10cef5089bd7334e6474c7041d3896b22225f4fff63fd9f084148bbaff
+        url: "https://github.com/frappe/books/releases/download/v0.33.1/frappe-books-0.33.1.aarch64.rpm"
+        sha256: ad107ed39c5088fc6c4ea24f242d4b6ab38cd44064096a3bd08dbe0a0fce065f
 
       - type: script
         dest-filename: run.sh
