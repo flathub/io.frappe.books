@@ -30,9 +30,9 @@ fi
 
 echo "Updating from $local_version -> $upstream_version"
 
-wget -O "$tmp_file" "https://github.com/frappe/books/releases/download/v$upstream_version/frappe-books-$upstream_version.x86_64.rpm"
+wget -O "$tmp_file" "https://github.com/frappe/books/releases/download/v$upstream_version/Frappe-Books-v$upstream_version-linux-x86_64.rpm"
 
-wget -O "$tmp_file_arm64" "https://github.com/frappe/books/releases/download/v$upstream_version/frappe-books-$upstream_version.aarch64.rpm"
+wget -O "$tmp_file_arm64" "https://github.com/frappe/books/releases/download/v$upstream_version/Frappe-Books-v$upstream_version-linux-aarch64.rpm"
 
 
 new_hash_x86=$(sha256sum $tmp_file | awk '{print $1}')
