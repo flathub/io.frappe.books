@@ -29,53 +29,56 @@
 		<name>Frappe</name>
 	</developer>
 
-	<releases>
+  <releases>
+    <release version="0.36.0" date="2025-11-06">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.36.0</url>
+    </release>
     <release version="0.34.1" date="2025-09-17">
       <url type="details">https://github.com/frappe/books/releases/tag/v0.34.1</url>
     </release>
-  <release version="0.33.1" date="2025-08-06">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.33.1</url>
-  </release>
-  <release version="0.32.0" date="2025-07-08">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.32.0</url>
-  </release>
-  <release version="0.31.0" date="2025-06-02">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.31.0</url>
-  </release>
-  <release version="0.30.0" date="2025-05-15">
-  <url type="details">https://github.com/frappe/books/releases/tag/v0.30.0</url>
-  </release>
-  <release version="0.29.0" date="2025-04-23">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.29.0</url>
-  </release>
-  <release version="0.28.0" date="2025-03-03">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.28.0</url>
-  </release>
-  <release version="0.27.0" date="2025-01-30">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.27.0</url>
-  </release>
-  <release version="0.26.1" date="2025-01-17">
-  <url type="details">https://github.com/frappe/books/releases/tag/v0.26.1</url>
-  </release>
-  <release version="0.26.0" date="2025-01-08">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.26.0</url>
-  </release>
-  <release version="0.25.1" date="2024-12-17">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.25.1</url>
-  </release>
-  <release version="0.25.0" date="2024-12-13">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.25.0</url>
-  </release>
-  <release version="0.24.1" date="2024-11-11">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.24.1</url>
-  </release>
-  <release version="0.24.0" date="2024-10-29">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.24.0</url>
-  </release>
-  <release version="0.23.0" date="2024-09-28">
-    <url type="details">https://github.com/frappe/books/releases/tag/v0.23.0</url>
-  </release>
-</releases>
+    <release version="0.33.1" date="2025-08-06">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.33.1</url>
+    </release>
+    <release version="0.32.0" date="2025-07-08">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.32.0</url>
+    </release>
+    <release version="0.31.0" date="2025-06-02">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.31.0</url>
+    </release>
+    <release version="0.30.0" date="2025-05-15">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.30.0</url>
+    </release>
+    <release version="0.29.0" date="2025-04-23">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.29.0</url>
+    </release>
+    <release version="0.28.0" date="2025-03-03">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.28.0</url>
+    </release>
+    <release version="0.27.0" date="2025-01-30">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.27.0</url>
+    </release>
+    <release version="0.26.1" date="2025-01-17">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.26.1</url>
+    </release>
+    <release version="0.26.0" date="2025-01-08">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.26.0</url>
+    </release>
+    <release version="0.25.1" date="2024-12-17">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.25.1</url>
+    </release>
+    <release version="0.25.0" date="2024-12-13">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.25.0</url>
+    </release>
+    <release version="0.24.1" date="2024-11-11">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.24.1</url>
+    </release>
+    <release version="0.24.0" date="2024-10-29">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.24.0</url>
+    </release>
+    <release version="0.23.0" date="2024-09-28">
+      <url type="details">https://github.com/frappe/books/releases/tag/v0.23.0</url>
+    </release>
+  </releases>
 
 	<screenshots>
     <screenshot type="default">
