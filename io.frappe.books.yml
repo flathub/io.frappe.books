@@ -25,6 +25,7 @@ modules:
       append-path: /usr/lib/sdk/node20/bin
       env:
         XDG_CACHE_HOME: /run/build/books/flatpak-node/cache
+        npm_config_nodedir: /run/build/books/flatpak-node/cache/node-gyp/22.3.27
     sources:
       - type: git
         url: https://github.com/frappe/books.git
