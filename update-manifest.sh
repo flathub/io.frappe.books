@@ -50,6 +50,17 @@ sed -i "s/commit: $old_commit/commit: $new_commit/" "$manifest_file"
 
 echo "Updated $manifest_file"
 
+# Update npm_config_nodedir if the Electron version changed
+new_electron_version=$(grep -oP 'node-v\K[\d.]+(?=-headers\.tar\.gz)' generated-sources.json | head -1)
+old_electron_version=$(grep -oP '(?<=flatpak-node/cache/node-gyp/)[\d.]+' "$manifest_file" | head -1)
+
+if [[ -n "$new_electron_version" && "$old_electron_version" != "$new_electron_version" ]]; then
+  sed -i "s|flatpak-node/cache/node-gyp/$old_electron_version|flatpak-node/cache/node-gyp/$new_electron_version|g" "$manifest_file"
+  echo "Updated Electron node headers version: $old_electron_version -> $new_electron_version"
+else
+  echo "Electron version unchanged ($old_electron_version), npm_config_nodedir left as-is"
+fi
+
 # Insert the new release entry at the top of the <releases> section
 echo "Updating $appdata_file..."
 tmp_appdata=$(mktemp)
