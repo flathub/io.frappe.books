@@ -1,0 +1,16 @@
+{
+  "appId": "io.frappe.books",
+  "productName": "Frappe Books",
+  "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
+  "asarUnpack": "**/*.node",
+  "files": "**",
+  "extends": null,
+  "directories": {
+    "output": "dist_electron/bundled",
+    "app": "dist_electron/build"
+  },
+  "extraResources": [
+    { "from": "translations", "to": "../translations" },
+    { "from": "templates", "to": "../templates" }
+  ]
+}

@@ -40,6 +40,9 @@ modules:
           - zypak-wrapper.sh /app/frappe-books/frappe-books "$@"
 
       - type: file
+        path: electron-builder.json
+
+      - type: file
         path: io.frappe.books.appdata.xml
 
     build-commands:
@@ -73,7 +76,7 @@ modules:
       #   - main entry is read from dist_electron/build/package.json ("main.js")
       # Without --config, electron-builder falls back to the empty build:{} key
       # in the root package.json, uses dist/ as output, and looks for index.js.
-      - . flatpak-node/electron-builder-arch-args.sh; node_modules/.bin/electron-builder --config electron-builder-config.mjs --linux dir $ELECTRON_BUILDER_ARCH_ARGS
+      - . flatpak-node/electron-builder-arch-args.sh; node_modules/.bin/electron-builder --config electron-builder.json --linux dir $ELECTRON_BUILDER_ARCH_ARGS
       # Install the unpacked Electron app (glob handles the arch suffix)
       - cp -r dist_electron/bundled/linux*unpacked /app/frappe-books
       # Install the zypak wrapper script
