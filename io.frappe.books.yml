@@ -40,6 +40,9 @@ modules:
           - zypak-wrapper.sh /app/frappe-books/frappe-books "$@"
 
       - type: file
+        path: frappe-books.desktop
+
+      - type: file
         path: electron-builder.json
 
       - type: file
@@ -81,7 +84,18 @@ modules:
       - cp -r dist_electron/bundled/linux*unpacked /app/frappe-books
       # Install the zypak wrapper script
       - install -Dm755 run.sh -t /app/bin/
-      # Fix the desktop file Exec key to use our wrapper
+      # Install icons from the source tree into the hicolor icon theme.
+      # The --linux dir electron-builder target produces only the unpacked app
+      # directory; it does not install desktop files or icons to system paths.
+      - install -Dm644 build/icons/16x16.png   ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/frappe-books.png
+      - install -Dm644 build/icons/32x32.png   ${FLATPAK_DEST}/share/icons/hicolor/32x32/apps/frappe-books.png
+      - install -Dm644 build/icons/48x48.png   ${FLATPAK_DEST}/share/icons/hicolor/48x48/apps/frappe-books.png
+      - install -Dm644 build/icons/64x64.png   ${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/frappe-books.png
+      - install -Dm644 build/icons/128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/frappe-books.png
+      - install -Dm644 build/icons/256x256.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/frappe-books.png
+      - install -Dm644 build/icons/512x512.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/frappe-books.png
+      # Install the desktop file, then fix the Exec key to use the zypak wrapper
+      - install -Dm644 frappe-books.desktop -t ${FLATPAK_DEST}/share/applications/
       - desktop-file-edit --set-key="Exec" --set-value="run.sh %U" ${FLATPAK_DEST}/share/applications/frappe-books.desktop
       # Install AppStream metadata
       - install -Dm0644 io.frappe.books.appdata.xml ${FLATPAK_DEST}/share/appdata/${FLATPAK_ID}.appdata.xml
