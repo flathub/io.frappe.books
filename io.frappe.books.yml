@@ -1,11 +1,13 @@
 app-id: io.frappe.books
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: "24.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: '24.08'
+base-version: "24.08"
 command: run.sh
 separate-locales: false
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node20
 rename-desktop-file: frappe-books.desktop
 rename-icon: frappe-books
 finish-args:
@@ -18,18 +20,19 @@ finish-args:
   - --env=ELECTRON_TRASH=gio
 modules:
   - name: books
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/node20/bin
+      env:
+        XDG_CACHE_HOME: /run/build/books/flatpak-node/cache
+        npm_config_nodedir: /run/build/books/flatpak-node/cache/node-gyp/22.3.27
     sources:
-      - type: archive
-        only-arches:
-          - x86_64
-        url: "https://github.com/frappe/books/releases/download/v0.36.0/Frappe-Books-v0.36.0-linux-x86_64.rpm"
-        sha256: 6b67f7d97bb92b781b65e844f5e02448a331ce2aa7f87219644a5feaed922aca
+      - type: git
+        url: https://github.com/frappe/books.git
+        tag: v0.36.0
+        commit: 2f028f42be70a1dbd45bd4c6483d57df2fc64805
 
-      - type: archive
-        only-arches:
-          - aarch64
-        url: "https://github.com/frappe/books/releases/download/v0.36.0/Frappe-Books-v0.36.0-linux-aarch64.rpm"
-        sha256: ba51c74c472df9163c0e746ec7f620cb638898c5dfd6c253af555cf6f6cc6491
+      - generated-sources.json
 
       - type: script
         dest-filename: run.sh
@@ -37,18 +40,65 @@ modules:
           - zypak-wrapper.sh /app/frappe-books/frappe-books "$@"
 
       - type: file
+        path: frappe-books.desktop
+
+      - type: file
+        path: electron-builder.json
+
+      - type: file
         path: io.frappe.books.appdata.xml
-    buildsystem: simple
+
     build-commands:
-      # copy the contents from the builddir to the flatpak's filesystem
-      - cp -ra ./'Frappe Books'/ /app/frappe-books
-      # Install app wrapper
+      # Configure yarn to use the pre-downloaded offline mirror
+      - HOME=$PWD yarn config --offline set yarn-offline-mirror $FLATPAK_BUILDER_BUILDDIR/flatpak-node/yarn-mirror
+      # Install all dependencies offline (postinstall runs electron-rebuild to
+      # compile better-sqlite3 against the correct Electron ABI headers,
+      # which flatpak-node-generator pre-downloads via --electron-node-headers)
+      - yarn --offline
+      # Build the main process (TypeScript via esbuild) and renderer (Vue/Vite)
+      # without invoking electron-builder packaging yet
+      - yarn build --nopackage
+      # electron-builder's app dir (dist_electron/build/) has an empty
+      # node_modules created during the build step.  Hard-link the full
+      # node_modules tree into it so electron-builder can find the production
+      # deps (knex, better-sqlite3, electron-store) and their transitive deps
+      # without network access.  Symlinks are preserved as-is (no -l) because
+      # node_gyp_bins/python3 points across device boundaries in the sandbox.
+      - cp -r node_modules/. dist_electron/build/node_modules/
+      # log_creds.txt is listed in electron-builder-config.mjs extraResources
+      # but is intentionally absent from the git repo (it holds crash-reporting
+      # credentials).  Create an empty placeholder so electron-builder does not
+      # abort with a "file not found" error.
+      - touch log_creds.txt
+      # Run electron-builder in directory (unpacked) mode so it produces a
+      # plain directory rather than an installer.  Pass the project's own
+      # electron-builder-config.mjs so that:
+      #   - directories.app  = dist_electron/build   (where build.mjs outputs)
+      #   - directories.output = dist_electron/bundled (what the cp step expects)
+      #   - asarUnpack = **/*.node  (keeps better-sqlite3 outside the asar)
+      #   - main entry is read from dist_electron/build/package.json ("main.js")
+      # Without --config, electron-builder falls back to the empty build:{} key
+      # in the root package.json, uses dist/ as output, and looks for index.js.
+      - . flatpak-node/electron-builder-arch-args.sh; node_modules/.bin/electron-builder --config electron-builder.json --linux dir $ELECTRON_BUILDER_ARCH_ARGS
+      # Install the unpacked Electron app (glob handles the arch suffix)
+      - cp -r dist_electron/bundled/linux*unpacked /app/frappe-books
+      # Install the zypak wrapper script
       - install -Dm755 run.sh -t /app/bin/
-      - cp -r ./share /app/
-      # patch the desktop file
+      # Install icons from the source tree into the hicolor icon theme.
+      # The --linux dir electron-builder target produces only the unpacked app
+      # directory; it does not install desktop files or icons to system paths.
+      - install -Dm644 build/icons/16x16.png   ${FLATPAK_DEST}/share/icons/hicolor/16x16/apps/frappe-books.png
+      - install -Dm644 build/icons/32x32.png   ${FLATPAK_DEST}/share/icons/hicolor/32x32/apps/frappe-books.png
+      - install -Dm644 build/icons/48x48.png   ${FLATPAK_DEST}/share/icons/hicolor/48x48/apps/frappe-books.png
+      - install -Dm644 build/icons/64x64.png   ${FLATPAK_DEST}/share/icons/hicolor/64x64/apps/frappe-books.png
+      - install -Dm644 build/icons/128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/frappe-books.png
+      - install -Dm644 build/icons/256x256.png ${FLATPAK_DEST}/share/icons/hicolor/256x256/apps/frappe-books.png
+      - install -Dm644 build/icons/512x512.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/frappe-books.png
+      # Install the desktop file, then fix the Exec key to use the zypak wrapper
+      - install -Dm644 frappe-books.desktop -t ${FLATPAK_DEST}/share/applications/
       - desktop-file-edit --set-key="Exec" --set-value="run.sh %U" ${FLATPAK_DEST}/share/applications/frappe-books.desktop
-      # install the metainfo
+      # Install AppStream metadata
       - install -Dm0644 io.frappe.books.appdata.xml ${FLATPAK_DEST}/share/appdata/${FLATPAK_ID}.appdata.xml
-      # fix the 512x512 icon size as it causes build issue due to wrong size
+      # Re-encode the 512x512 icon so it is exactly 512x512 pixels
       - ffmpeg -i ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/frappe-books.png -vf scale=512:512 frappe-icon.png
       - mv frappe-icon.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/frappe-books.png

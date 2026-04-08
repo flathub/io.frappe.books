@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Frappe Books
+GenericName=Accounting
+Comment=Simple book-keeping app for everyone
+Exec=frappe-books
+Icon=frappe-books
+Type=Application
+Categories=Finance;Office;
+StartupNotify=true
+StartupWMClass=frappe-books
