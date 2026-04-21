@@ -8,14 +8,14 @@ set -e
 
 api_response=$(curl -s -f https://api.github.com/repos/frappe/books/releases?per_page=1)
 
-upstream_version=$(echo  "$api_response"  | jq -r '.[0].name')
+upstream_version=$(echo "$api_response" | jq -r '.[0].tag_name' | sed 's/^v//')
 
 release_date=$(echo "$api_response" | jq -r '.[0].published_at' | cut -dT -f1)
 
 manifest_file='io.frappe.books.yml'
 appdata_file='io.frappe.books.appdata.xml'
 
-local_version=$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "$manifest_file" | head -1)
+local_version=$(grep -oP '(?<=tag: v)[0-9]+\.[0-9]+\.[0-9]+' "$manifest_file")
 
 if [[ "$local_version" == "$upstream_version" ]]; then
  echo "No updates found"
@@ -63,8 +63,11 @@ fi
 
 # Insert the new release entry at the top of the <releases> section
 echo "Updating $appdata_file..."
-tmp_appdata=$(mktemp)
-awk -v version="$upstream_version" -v date="$release_date" '
+if grep -q "version=\"$upstream_version\"" "$appdata_file"; then
+  echo "Release $upstream_version already present in $appdata_file, skipping."
+else
+  tmp_appdata=$(mktemp)
+  awk -v version="$upstream_version" -v date="$release_date" '
 /<releases>/ {
     print
     print "    <release version=\"" version "\" date=\"" date "\">"
@@ -74,8 +77,8 @@ awk -v version="$upstream_version" -v date="$release_date" '
 }
 { print }
 ' "$appdata_file" > "$tmp_appdata" && mv "$tmp_appdata" "$appdata_file"
-
-echo "Updated $appdata_file"
+  echo "Updated $appdata_file"
+fi
 echo ""
 echo "Done! Manifest updated to v$upstream_version."
 echo "Review the changes, then commit:"
